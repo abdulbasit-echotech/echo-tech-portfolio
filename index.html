@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Abdul Basit · Echo Tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+  --border:#30363d;--border2:#21262d;
+  --text:#e6edf3;--muted:#8b949e;--hint:#6e7681;
+  --green:#238636;--green-light:#7ee787;--green-dim:rgba(35,134,54,0.12);
+  --blue:#1f6feb;
+  --font-display:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;line-height:1.6}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--green);border-radius:3px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 60px;display:flex;justify-content:space-between;align-items:center;transition:all .3s}
+nav.scrolled{background:rgba(13,17,23,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border2)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:14px;letter-spacing:1.5px}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--green-light);animation:pulse 2s ease-in-out infinite}
+.nav-links{display:flex;gap:36px;font-size:13px;color:var(--muted)}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 60px 80px;position:relative;overflow:hidden}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(35,134,54,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(35,134,54,.035) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+.glow{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
+.glow-1{width:420px;height:420px;background:rgba(35,134,54,.13);top:8%;left:4%}
+.glow-2{width:500px;height:500px;background:rgba(31,111,235,.08);bottom:10%;right:5%}
+.glow-3{width:260px;height:260px;background:rgba(35,134,54,.09);top:15%;right:25%}
+.hero-content{max-width:760px;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(35,134,54,.1);border:1px solid rgba(35,134,54,.28);border-radius:20px;padding:6px 16px;margin-bottom:36px;font-family:var(--font-mono);font-size:11px;color:var(--green-light);letter-spacing:.8px;animation:fadeUp .5s ease both}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green-light);animation:pulse 2s infinite}
+.hero-name{font-family:var(--font-display);font-size:clamp(44px,8vw,88px);font-weight:800;line-height:1.03;margin-bottom:6px;animation:fadeUp .5s .08s ease both;opacity:0}
+.hero-title{font-family:var(--font-mono);font-size:clamp(16px,2.5vw,24px);color:var(--green);font-weight:500;margin-bottom:28px;animation:fadeUp .5s .16s ease both;opacity:0;min-height:2em}
+.cursor{display:inline-block;animation:blink 1s infinite}
+.hero-desc{font-size:17px;color:var(--muted);line-height:1.85;max-width:540px;margin-bottom:44px;animation:fadeUp .5s .24s ease both;opacity:0}
+.hero-desc span{color:var(--text)}
+.hero-desc em{color:var(--green-light);font-style:normal}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .5s .32s ease both;opacity:0}
+.btn-primary{background:var(--green);color:#fff;padding:14px 28px;border-radius:8px;font-weight:600;font-size:14px;font-family:var(--font-body);border:none;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-primary:hover{background:#2ea043;transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--text);padding:14px 28px;border-radius:8px;font-weight:600;font-size:14px;font-family:var(--font-body);border:1px solid var(--border);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-ghost:hover{border-color:var(--muted);background:rgba(255,255,255,.04)}
+
+/* STATS */
+.stats-bar{border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:36px 60px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:36px;background:rgba(22,27,34,.6)}
+.stat{text-align:center}
+.stat-num{font-family:var(--font-display);font-size:40px;font-weight:800;color:var(--green-light);line-height:1}
+.stat-label{font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:.5px}
+
+/* SECTIONS */
+section{padding:96px 60px}
+.section-label{font-family:var(--font-mono);font-size:11px;color:var(--green);letter-spacing:3px;margin-bottom:14px}
+.section-title{font-family:var(--font-display);font-size:clamp(28px,4vw,46px);font-weight:800;line-height:1.15;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--muted);margin-bottom:52px;max-width:520px;line-height:1.7}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.service-card{background:rgba(22,27,34,.9);border:1px solid var(--border);border-radius:12px;padding:26px;transition:all .3s;cursor:default}
+.service-card:hover{background:rgba(35,134,54,.07);border-color:var(--green);transform:translateY(-3px);box-shadow:0 8px 28px rgba(35,134,54,.13)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.card-icon{font-size:26px;line-height:1}
+.card-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.8px;padding:3px 9px;border-radius:20px;border:1px solid;font-weight:500}
+.tag-core{color:#7ee787;background:rgba(35,134,54,.15);border-color:rgba(35,134,54,.3)}
+.tag-revenue{color:#79c0ff;background:rgba(31,111,235,.15);border-color:rgba(31,111,235,.3)}
+.tag-ops{color:#e3b341;background:rgba(187,128,9,.15);border-color:rgba(187,128,9,.3)}
+.tag-growth{color:#d2a8ff;background:rgba(163,113,247,.15);border-color:rgba(163,113,247,.3)}
+.tag-insights{color:#79c0ff;background:rgba(31,111,235,.15);border-color:rgba(31,111,235,.3)}
+.tag-ai{color:#7ee787;background:rgba(35,134,54,.15);border-color:rgba(35,134,54,.3)}
+.card-title{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* STACK */
+.stack-section{background:rgba(22,27,34,.4);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+.stack-badge{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:11px 15px;transition:all .2s;cursor:default}
+.stack-badge:hover{background:rgba(255,255,255,.06);border-color:var(--muted)}
+.stack-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.stack-name{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);transition:color .2s}
+.stack-badge:hover .stack-name{color:var(--text)}
+
+/* WHY */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.why-card{background:rgba(22,27,34,.9);border:1px solid var(--border2);border-radius:12px;padding:28px}
+.why-icon{font-size:30px;margin-bottom:16px}
+.why-title{font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:10px}
+.why-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* CTA */
+.cta-section{background:rgba(35,134,54,.05);border-top:1px solid var(--border2);text-align:center;position:relative;overflow:hidden}
+.cta-inner{max-width:580px;margin:0 auto;position:relative;z-index:1}
+.cta-section .section-title{margin-bottom:16px}
+.cta-desc{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:40px}
+
+/* FOOTER */
+footer{padding:28px 60px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:1px}
+.footer-credit{font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+.footer-link{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-link:hover{color:var(--green-light)}
+
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  nav{padding:16px 24px}
+  .nav-links{display:none}
+  .hero,.stats-bar,section,footer{padding-left:24px;padding-right:24px}
+  .hero-name{font-size:clamp(36px,10vw,60px)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="pulse-dot"></div>
+    ECHO TECH
+  </div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#stack">Stack</a>
+    <a href="#why">Why Echo Tech</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="grid-bg"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+  <div class="hero-content">
+    <div class="badge"><div class="badge-dot"></div>OPEN FOR EARLY PARTNERS · LIMITED SPOTS</div>
+    <h1 class="hero-name">Abdul Basit</h1>
+    <div class="hero-title"><span id="typewriter"></span><span class="cursor">█</span></div>
+    <p class="hero-desc">
+      I build <span>AI-powered web apps</span> exclusively for clinics and healthcare professionals.
+      Custom dashboards backed by automation engines —
+      not templates, not plugins. <em>Real software.</em>
+    </p>
+    <div class="hero-btns">
+      <a href="mailto:hello@echotech.agency" class="btn-primary">Get in Touch →</a>
+      <a href="#services" class="btn-ghost">See the Work</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num" data-target="8">0</div><div class="stat-label">APPS IN STACK</div></div>
+  <div class="stat"><div class="stat-num" data-target="4" data-suffix="+">0</div><div class="stat-label">COUNTRIES TARGETED</div></div>
+  <div class="stat"><div class="stat-num" data-target="3">0</div><div class="stat-label">AI MODELS INTEGRATED</div></div>
+  <div class="stat"><div class="stat-num" data-target="100" data-suffix="%">0</div><div class="stat-label">HEALTHCARE FOCUS</div></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="reveal"><div class="section-label">// SERVICES</div></div>
+  <div class="reveal"><h2 class="section-title">8 apps. One agency.<br><span style="color:var(--muted);font-weight:400">Built only for clinics.</span></h2></div>
+  <div class="section-sub reveal">Every clinic gets a custom-built web app with a client-facing dashboard, backed by a full automation engine.</div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">📅</div><span class="card-tag tag-core">CORE</span></div>
+      <div class="card-title">Appointment Automation</div>
+      <div class="card-desc">Books, confirms, reschedules and follows up with patients automatically. Zero manual effort.</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">📋</div><span class="card-tag tag-core">CORE</span></div>
+      <div class="card-title">Patient Intake AI</div>
+      <div class="card-desc">Smart digital intake forms with triage routing and pre-visit data collection.</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">💰</div><span class="card-tag tag-revenue">REVENUE</span></div>
+      <div class="card-title">Billing & Collections</div>
+      <div class="card-desc">Automated invoice reminders, payment follow-ups and collections workflows.</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">💬</div><span class="card-tag tag-ops">OPS</span></div>
+      <div class="card-title">Staff Communication</div>
+      <div class="card-desc">Internal alerts, task assignments and shift coordination — all automated.</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">🔗</div><span class="card-tag tag-growth">GROWTH</span></div>
+      <div class="card-title">Referral Tracker</div>
+      <div class="card-desc">Tracks referrals in and out with live status updates and follow-up triggers.</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">⭐</div><span class="card-tag tag-growth">GROWTH</span></div>
+      <div class="card-title">Reputation Manager</div>
+      <div class="card-desc">Monitors reviews, triggers follow-ups for happy patients, protects your rating.</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">📊</div><span class="card-tag tag-insights">INSIGHTS</span></div>
+      <div class="card-title">Analytics Dashboard</div>
+      <div class="card-desc">KPIs, patient trends, revenue and performance — all in one clean dashboard.</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="card-top"><div class="card-icon">🤖</div><span class="card-tag tag-ai">AI</span></div>
+      <div class="card-title">Custom AI Agent</div>
+      <div class="card-desc">Clinic-branded chat assistant handling patient queries 24/7 with no human needed.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section class="stack-section" id="stack">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal"><div class="section-label">// TECH STACK</div></div>
+    <div class="reveal"><h2 class="section-title">What Echo Tech runs on.</h2></div>
+    <div class="stack-grid reveal">
+      <div class="stack-badge"><div class="stack-dot" style="background:#3776AB"></div><span class="stack-name">Python</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#F7DF1E"></div><span class="stack-name">JavaScript</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#61DAFB"></div><span class="stack-name">React</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#339933"></div><span class="stack-name">Node.js</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#EA4B71"></div><span class="stack-name">n8n</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#6D00CC"></div><span class="stack-name">Make</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#3ECF8E"></div><span class="stack-name">Supabase</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#ffffff"></div><span class="stack-name">OpenAI</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#CC785C"></div><span class="stack-name">Claude API</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#ffffff"></div><span class="stack-name">Vercel</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#4169E1"></div><span class="stack-name">PostgreSQL</span></div>
+      <div class="stack-badge"><div class="stack-dot" style="background:#FF4154"></div><span class="stack-name">Railway</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="reveal"><div class="section-label">// WHY ECHO TECH</div></div>
+  <div class="reveal"><h2 class="section-title">The difference is the focus.</h2></div>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <div class="why-icon">🏥</div>
+      <div class="why-title">Clinics only</div>
+      <div class="why-desc">Deep specialization means better systems, faster delivery, and fewer mistakes. Not a generalist agency that does everything for everyone.</div>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">🌍</div>
+      <div class="why-title">Built for international</div>
+      <div class="why-desc">UK · US · UAE · Canada. USD pricing, async-friendly communication, global delivery with no timezone barriers.</div>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">💰</div>
+      <div class="why-title">Pakistan-based costs</div>
+      <div class="why-desc">Enterprise-grade quality at a price that makes sense for growing clinics — not just large hospital groups with big budgets.</div>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">👤</div>
+      <div class="why-title">Direct founder access</div>
+      <div class="why-desc">You talk to Abdul — the person actually building your system. No account managers, no handoffs, no surprises.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="glow" style="width:400px;height:400px;background:rgba(35,134,54,.07);top:0;left:15%;filter:blur(80px)"></div>
+  <div class="glow" style="width:300px;height:300px;background:rgba(31,111,235,.06);bottom:0;right:20%;filter:blur(80px)"></div>
+  <div class="cta-inner">
+    <div class="reveal"><div class="section-label" style="text-align:center">// EARLY PARTNER PROGRAM</div></div>
+    <div class="reveal"><h2 class="section-title">Ready to automate<br>your clinic?</h2></div>
+    <p class="cta-desc reveal">Echo Tech is currently onboarding a limited number of early clinic partners. Get in touch to learn what we can build for you.</p>
+    <div class="reveal">
+      <a href="mailto:hello@echotech.agency" class="btn-primary" style="font-size:15px;padding:16px 40px">Start the Conversation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand"><div class="pulse-dot"></div>ECHO TECH</div>
+  <div class="footer-credit">Built by Abdul Basit · Peshawar, Pakistan 🇵🇰</div>
+  <a href="https://github.com/abdulbasit-echotech" class="footer-link">github.com/abdulbasit-echotech</a>
+</footer>
+
+<script>
+// NAV scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40)
+})
+
+// Typewriter
+const phrases=["Founder @ Echo Tech","AI Automation Builder","Healthcare Tech Specialist"]
+let pi=0,ci=0,deleting=false,el=document.getElementById('typewriter')
+function type(){
+  const phrase=phrases[pi]
+  el.textContent=deleting?phrase.slice(0,ci--):phrase.slice(0,ci++)
+  if(!deleting&&ci>phrase.length){setTimeout(()=>{deleting=true;type()},1800);return}
+  if(deleting&&ci<0){ci=0;deleting=false;pi=(pi+1)%phrases.length;setTimeout(type,400);return}
+  setTimeout(type,deleting?40:70)
+}
+type()
+
+// Scroll reveal
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}})
+},{threshold:0.12})
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+
+// Counter animation
+function animateCounter(el){
+  const target=parseInt(el.dataset.target)
+  const suffix=el.dataset.suffix||''
+  let current=0
+  const step=Math.ceil(target/50)
+  const timer=setInterval(()=>{
+    current+=step
+    if(current>=target){current=target;clearInterval(timer)}
+    el.textContent=current+suffix
+  },28)
+}
+const counterObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){animateCounter(e.target);counterObs.unobserve(e.target)}
+  })
+},{threshold:0.5})
+document.querySelectorAll('[data-target]').forEach(el=>counterObs.observe(el))
+</script>
+</body>
+</html>
